@@ -4,6 +4,7 @@ app.use(express.json());
 const port = 3001;
 const fs = require("fs");
 let socket = require("socket.io");
+var rimraf = require("rimraf");
 const server = app.listen(port, () => console.log(`Listening on ${port}`));
 
 let chatroomId = 0;
@@ -148,20 +149,25 @@ app.get('/usernamelist', (req, res) => {
 
 //Get chatroomList
 
+
+app.get("/chatroomlist", (req, res) => {
+
+    let chatroomList = [];
+
+    fs.readdir("./", (err, data) => {
+        res.send(data);
+    })
+
+})
+
 //Delete Chatroom
 
-app.delete("/delete:chatroom2", (req, res) => {
-    
-    //Tar bort filer, inte mappar
-    const path = './test2.txt'
+app.delete("/delete:id", (req, res) => {
 
-    fs.unlink(path, (err) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-      
-        //file removed
-      })
-      res.end();
+    rimraf("./chatroom2", function () { 
+        res.statusCode = 200;
+        console.log("done"); });
+
+    res.end();
+
 })
