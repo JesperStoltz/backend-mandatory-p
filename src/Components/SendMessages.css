@@ -1,0 +1,34 @@
+.NewMessages_container {
+    height: 100px;
+    width: 800px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    background-image: linear-gradient(to right, black, purple,  black);
+  }
+
+  .SendMessages{
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+  }
+
+  .Username_says {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-left: 10px;
+    margin-right: 1px;
+    color: white;
+  }
+
+  .Message_input {
+      width: 100%;
+      height: 96px;
+      resize: none;
+      font-size: 25px;
+  }
+
+  .SendMessage_button {
+    width: 200px;
+    font-size: 30px;
+  }

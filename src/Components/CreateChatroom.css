@@ -1,0 +1,36 @@
+.Create_chatroom {
+    width: 300px;
+    height: 100px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+  }
+
+  .Create_chatroom_title {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+
+  .Create_chatroom_input {
+    height: 40px;
+    font-size: 20px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-style: italic;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+
+  .Create_chatroom_input::placeholder {
+    font-style: italic;
+  }
+
+  .Create_chatroom_input:focus::-webkit-input-placeholder {
+    opacity: 0;
+  }
+  .Create_chatroom_button {
+    
+  }
