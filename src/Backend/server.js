@@ -29,10 +29,10 @@ app.post("/createchat", (req, res) => {
     }
 
     //Check if directory/chatroom already exists
-    fs.access("../Database"+body.title, (err) => {
+    fs.access("../Database/"+body.title, (err) => {
         if (err) {
             //Creates chatroom
-            fs.mkdir('../Database'+body.title, (err) => {
+            fs.mkdir('../Database/'+body.title, (err) => {
         
                 if (err) {
                       console.error(err);
@@ -45,7 +45,7 @@ app.post("/createchat", (req, res) => {
                         chatroomName: body.title,
                     }
 
-                        fs.writeFile('../Database' + body.title + "/" + body.title + '.json', JSON.stringify(chatroomObj), (err) => {
+                        fs.writeFile('../Database/' + body.title + "/" + body.title + '.json', JSON.stringify(chatroomObj), (err) => {
                             if (err) {
                                 console.error(err);
                             }
@@ -155,7 +155,7 @@ app.get("/chatroomlist", (req, res) => {
         
         let chatroomList = data;
         res.send(chatroomList);
-        
+
     })
 
 
@@ -163,9 +163,9 @@ app.get("/chatroomlist", (req, res) => {
 
 //Delete Chatroom
 
-app.delete("/delete:id", (req, res) => {
+app.delete("/delete", (req, res) => {
 
-    rimraf("../Database/chatroom2", function () { 
+    rimraf("../Database/test1", function () { 
         res.statusCode = 200;
         console.log("done"); });
 

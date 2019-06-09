@@ -1,29 +1,40 @@
 import React, {useState, useEffect, useRef} from 'react';
 import './CreateChatroom.css';
+import axios from "axios";
+import io from "socket.io-client";
 const fs = require("fs");
+
+
 
 //Build a POST to send a new chatroom-object to the server.
 
-const CreateChatroom = () => {
-    const [username, updateUsername] = useState("");
+const CreateChatroom = (props) => {
+    const [newChatroom, updateNewChatroom] = useState("test");
+    
+    const onChange = (e) => {
+        updateNewChatroom(e.target.value)
+    }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        // Creates /tmp/a/apple, regardless of whether `/tmp` and /tmp/a exist.
-        fs.mkdir('./Database/Test', { recursive: true }, (err) => {
-            if (err) throw err;
-        });
-    }   
-
+        axios.post("http://localhost:3001/createchat", {title: newChatroom})
+        .then (res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
     return (
         <>
         <form className="Create_chatroom" onSubmit={onSubmit}> 
             <p className="Create_chatroom_title">Create new chatroom</p>
             <input
-             className="Create_chatroom_input" 
-             type="text" 
-             placeholder="New chatroom name here"
-             maxLength={20}
+            onChange={onChange} 
+            className="Create_chatroom_input" 
+            type="text" 
+            placeholder="New chatroom name here"
+            maxLength={20}
             />
             <button className="Create_chatroom_button">Create</button>
         </form> {/* //End Create_chatroom */}

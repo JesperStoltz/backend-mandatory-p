@@ -7,6 +7,10 @@ import SendMessages from "./SendMessages.js";
 import Userlist from "./Userlist.js";
 
 const Home = (props) => { 
+  const [currentChatroom, updateCurrentChatroom] = useState("");
+  const [newMessage, updateNewMessage] = useState([]);
+  const [username, updateUsername] = useState(props.username);
+
 
   return (
     <>
@@ -20,7 +24,7 @@ const Home = (props) => {
               <div className="Username">
                 <p className="Username_text">{props.username}</p>
               </div>
-              <CreateChatroom />
+              <CreateChatroom/>
               
               <ChatroomList />
               <Userlist />
@@ -30,7 +34,7 @@ const Home = (props) => {
           </div> {/* End Chatwindow_Lists_container */}
 
         
-            <SendMessages />
+            <SendMessages username={username}/>
           
 
         </div> {/* End ChatApp */}
