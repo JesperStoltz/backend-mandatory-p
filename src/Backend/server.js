@@ -19,6 +19,13 @@ function getMessageId() {
     return messageId++;
 }
 
+
+/*
+Dubbelkolla så att du inte 'dubbelavslutar', t.ex. res.end() efter res.send(). 
+res.send() kör res.end() implicit.
+Gå även igenom alla statuskoder!!
+*/
+
 //==============CREATE CHATROOM===============
 app.post("/createchat", (req, res) => {
     const body = req.body;
@@ -97,12 +104,15 @@ app.post("/sendmessage", (req, res) => {
 
 //GET Chatroom
 
-app.get("/chatroom", (req, res) => {
-    
+app.get("/chatroom/:id", (req, res) => {
+    const body = req.body;
+    let id = req.params.id;
     let chatroom = [];
 
-    fs.readFile('../Database/Chatroom1/Chatroom1' + 'Messages.json', (err, data) => {
+
+    fs.readFile('../Database/'+ id + '/' + id + 'Messages.json', (err, data) => {
         if (err) {
+            console.log(body.chatroom)
               console.error(err);
               res.statusCode = 500;
               res.end();
@@ -148,27 +158,21 @@ app.get('/usernamelist', (req, res) => {
 
 //Get chatroomList
 
-
 app.get("/chatroomlist", (req, res) => {
-
+    console.log("CHAT ROOM");
     fs.readdir("../Database", (err, data) => {
-        
+        console.log(err, data);
         let chatroomList = data;
         res.send(chatroomList);
-
     })
-
-
 })
 
 //Delete Chatroom
 
-app.delete("/delete", (req, res) => {
-
-    rimraf("../Database/test1", function () { 
+app.delete("/delete:id", (req, res) => {
+    let id = req.params.id;
+    rimraf("../Database/"+id, function () { 
         res.statusCode = 200;
-        console.log("done"); });
-
-    res.end();
-
+        console.log(id); });
+        res.end();
 })

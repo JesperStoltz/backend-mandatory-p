@@ -5,19 +5,35 @@ import axios from 'axios';
 
 //Build a GET-method for the chatroom-name keys!
 
-const ChatroomList = () => {
-    const [chatroomList, updateChatroomList] = useState([]);
-
+const ChatroomList = (props) => {
   useEffect(() => {
-    axios.get("http://localhost:3001/chatroomlist")
+    axios.get("/chatroomlist")
     .then(res => {
-        updateChatroomList(res.data)
-        console.log(chatroomList);
+        props.updateChatroomList(res.data)
     })
   }, []);
 
-  let chatlist = chatroomList.map(x => 
-          <li className="list-item">{x}</li>
+  const Delete = (e) => {
+    let id = e.target.id;
+
+    axios.delete("/delete"+id)
+    .then (res => {
+      console.log(res);
+    })
+  }
+
+  const Pick = (e) => {
+    let val = e.target.id;
+    props.updatePickChatroom(val);
+  }
+
+  let chatlist = props.chatroomList.map(x => 
+        <>
+          <li className="list-item" onClick={Pick}>
+            <div className="list_content" id={x}>{x}</div>
+            <div className="list_delete_content" onClick={Delete} id={x}>X</div>
+            </li>
+        </>
   );
 
     return (

@@ -9,15 +9,15 @@ const fs = require("fs");
 //Build a POST to send a new chatroom-object to the server.
 
 const CreateChatroom = (props) => {
-    const [newChatroom, updateNewChatroom] = useState("test");
+    
     
     const onChange = (e) => {
-        updateNewChatroom(e.target.value)
+        props.updateNewChatroom(e.target.value);
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/createchat", {title: newChatroom})
+        axios.post("/createchat", {title: props.newChatroom})
         .then (res => {
             console.log(res);
         })

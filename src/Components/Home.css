@@ -25,7 +25,7 @@
   .Chatroom_sidebar {
     display: flex;
     flex-direction: column;
-    background-image: linear-gradient(to bottom left, rgb(26, 25, 25) , purple, rgb(26, 25, 25));
+    background-image: linear-gradient(to bottom left, rgb(116, 112, 112) , purple, rgb(116, 112, 112));
   }
   
   .Username {

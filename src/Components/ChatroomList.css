@@ -23,4 +23,10 @@
 
   .list-item {
     margin-top: 3px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .list_delete_content {
+    margin-left: 10px;
   }

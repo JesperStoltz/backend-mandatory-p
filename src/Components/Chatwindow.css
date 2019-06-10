@@ -4,3 +4,34 @@
     box-sizing: border-box;
     background-image: linear-gradient(to bottom right, rgb(116, 112, 112) , purple, rgb(122, 120, 120));
   }
+
+  .Chatwindow_title {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+
+  .Chatwindow_content { /*Detta är ULn */
+    margin-top: 10px;
+    list-style: none;
+  }
+
+  .list-item_username {
+    margin-left: 3px;
+    color: white;
+    font-weight: bold;
+    list-style: none;
+    margin-top: 10px;
+    border: none;
+    font-size: 20px;
+  }
+
+  .list-item_message {
+    margin-left: 11px;
+    color: white;
+    font-weight: bold;
+    list-style: none;
+    border: none;
+    font-size: 14px;
+  }
