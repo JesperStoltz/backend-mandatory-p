@@ -6,14 +6,14 @@ import axios from "axios";
 
 const SendMessages = (props) => {
 
-
     const onChange = (e) => {
         props.updateNewMessage(e.target.value)
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post("/sendmessage", {username: props.username, message: props.newMessage})
+
+        axios.post("/send/"+props.currentChatroom, {user: props.username, msg: props.newMessage})
         .then (res => {
             console.log(res);
         })

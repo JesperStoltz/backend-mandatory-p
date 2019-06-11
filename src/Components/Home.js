@@ -22,7 +22,8 @@ Typ.
 
 const Home = (props) => {
   const [newChatroom, updateNewChatroom] = useState("test");
-  const [currentChatroom, updateCurrentChatroom] = useState([]);
+  const [currentChatroom, updateCurrentChatroom] = useState("Jesper1");
+  const [chatWindow, updateChatwindow] = useState([]);
   const [chatroomList, updateChatroomList] = useState([]);
   const [userList, updateUserList] = useState([]);
   const [newMessage, updateNewMessage] = useState([]);
@@ -36,7 +37,7 @@ const Home = (props) => {
 
         <div className="Chatwindow_Lists_container">
           <div onClick={onClick}>TESTDIV</div>
-          <Chatwindow currentChatroom={currentChatroom} updateCurrentChatroom={updateCurrentChatroom} />
+          <Chatwindow currentChatroom={currentChatroom} chatWindow={chatWindow} updateChatwindow={updateChatwindow} />
 
           <div className="Chatroom_sidebar">
             <div className="Username">
@@ -44,15 +45,15 @@ const Home = (props) => {
             </div>
             <CreateChatroom newChatroom={newChatroom} updateNewChatroom={updateNewChatroom} />
 
-            <ChatroomList chatroomList={chatroomList} updateChatroomList={updateChatroomList} />
-            <Userlist userList={userList} updateUserList={updateUserList} />
+            <ChatroomList chatroomList={chatroomList} updateChatroomList={updateChatroomList} updateCurrentChatroom={updateCurrentChatroom} />
+            <Userlist userList={userList} updateUserList={updateUserList} updateCurrentChatroom={updateCurrentChatroom} currentChatroom={currentChatroom}/>
 
           </div> {/* //End Chatroom_sidebar */}
 
         </div> {/* End Chatwindow_Lists_container */}
 
 
-        <SendMessages username={props.username} newMessage={newMessage} updateNewMessage={updateNewMessage} />
+        <SendMessages username={props.username} newMessage={newMessage} updateNewMessage={updateNewMessage} currentChatroom={currentChatroom}/>
 
 
       </div> {/* End ChatApp */}

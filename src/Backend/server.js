@@ -55,6 +55,7 @@ app.get("/chatrooms/:name", (req, res) => {
     }else{
        res.status(404).end() 
     }
+    return;
 });
 
 //========================CREATE ROOM=========================OK
@@ -88,6 +89,7 @@ app.post("/newroom/", (req, res) => {
             res.status(201).json(roomObj);
         }
     });
+    return;
 })
 
 
@@ -127,47 +129,30 @@ app.post("/newroom/", (req, res) => {
             else {
                 res.status(201);
                 res.send("Message created");
+                return;
             }
         }); 
-
-
-        res.status(201).send(newMessageObj)
-
     })
 
 //=======================Get Usernames=====================OK
-    let userList = []
 
-    for (let i=0; i<data1.length; i++){
-        console.log(data1[i].chatroom)
-        for (let j=0; j<data1[i].chatroom.length; j++){
-            
-            userList.push(data1[i].chatroom[j].user)
-            console.log(userList);
+
+    app.get('/usernamelist/:name', (req, res) => {
+        let name = req.params.name;
+        let arr=[];
+
+        for (let i=0; i<data1.length; i++){
+
+            if (data1[i].name === name) {
+            for (let key of data1[i].chatroom) {
+                arr.push(key.user)
+            }
+            }
         }
-        
-    }
 
-    app.get('/usernamelist/', (req, res) => {
-        let uniqueUsers = [];
-
-        fs.readFile('./data.json', (err, data) => {
-            if (err) {
-                console.error(err);
-                res.statusCode = 500;
-                res.end();
-            }
-            else {
-                for (let i=0; i<userList.length; i++){
-                    if (!uniqueUsers.includes(userList[i])) {
-                        uniqueUsers.push(userList[i]);
-                        console.log(uniqueUsers);
-                    }
-                }
-                res.statusCode = 201;
-                res.send(uniqueUsers);
-            }
-        });
+        res.send(arr)
+        res.statusCode = 200;
+        return;
     });
 
     //===========================Delete Chatroom====================================OK OK

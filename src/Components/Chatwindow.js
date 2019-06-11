@@ -4,30 +4,36 @@ import axios from 'axios';
 
 //Build a GET to get both the usernames and the messages from the specific chatrooms key.
 
+
 const Chatwindow = (props) => {
 
     useEffect(() => {
-        axios.get("/chatroom/" + props.pickChatroom)
+        axios.get("/chatrooms/"+props.currentChatroom)
             .then(res => {
-                console.log(res.data);
-                props.updateCurrentChatroom(res.data)
+                let arr=[];
+                for (let key of res.data.chatroom) {
+                    arr.push(key);
+                }
+                props.updateChatwindow(arr);  
+            
             })
-    }, [props.pickChatroom]);
+    }, [props.currentChatroom]);
 
-    let chatwindow = props.currentChatroom.map(x =>
+ 
+     let chatwindow = props.chatWindow.map(x =>
         <>
-            <li className="list-item_username">{x.username}</li>
-            <li className="list-item_message">{x.message}</li>
+            <li className="list-item_username">{x.user}</li>
+            <li className="list-item_message">{x.msg}</li>
         </>
-    );
-
+    );  
+        
     return (
         <>
             <div className="Chatwindow">
-                <p className="Chatwindow_title">{props.pickChatroom}</p>
+                <p className="Chatwindow_title">{props.currentChatroom}</p>
 
                 <ul className="Chatwindow_content">
-                    {chatwindow}
+                     {chatwindow}
                 </ul>
             </div>
         </>

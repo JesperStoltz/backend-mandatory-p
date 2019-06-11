@@ -7,16 +7,20 @@ import axios from 'axios';
 
 const ChatroomList = (props) => {
   useEffect(() => {
-    axios.get("/chatroomlist")
+    axios.get("/chatrooms/")
     .then(res => {
-        props.updateChatroomList(res.data)
+      let arr = [];
+      for (let i=0; i<res.data.length; i++) {
+        arr.push(res.data[i].name);
+      }
+        props.updateChatroomList(arr)
     })
   }, []);
 
   const Delete = (e) => {
     let id = e.target.id;
 
-    axios.delete("/delete"+id)
+    axios.delete("/delete/"+id)
     .then (res => {
       console.log(res);
     })
@@ -24,7 +28,7 @@ const ChatroomList = (props) => {
 
   const Pick = (e) => {
     let val = e.target.id;
-    //rops.updatePickChatroom(val);
+    props.updateCurrentChatroom(val)
   }
 
   let chatlist = props.chatroomList.map(x => 

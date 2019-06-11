@@ -17,7 +17,7 @@ const CreateChatroom = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post("/createchat", {title: props.newChatroom})
+        axios.post("/newroom/", {name: props.newChatroom})
         .then (res => {
             console.log(res);
         })
