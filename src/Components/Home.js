@@ -26,11 +26,9 @@ const Home = (props) => {
   const [chatroomList, updateChatroomList] = useState([]);
   const [userList, updateUserList] = useState([]);
   const [newMessage, updateNewMessage] = useState([]);
-  const [pickChatroom, updatePickChatroom] = useState("Chatroom1");
-
 
   const onClick = (e) => {
-    console.log(pickChatroom)
+    console.log("klick")
   }
   return (
     <>
@@ -38,7 +36,7 @@ const Home = (props) => {
 
         <div className="Chatwindow_Lists_container">
           <div onClick={onClick}>TESTDIV</div>
-          <Chatwindow pickChatroom={pickChatroom} currentChatroom={currentChatroom} updateCurrentChatroom={updateCurrentChatroom} />
+          <Chatwindow currentChatroom={currentChatroom} updateCurrentChatroom={updateCurrentChatroom} />
 
           <div className="Chatroom_sidebar">
             <div className="Username">
@@ -46,7 +44,7 @@ const Home = (props) => {
             </div>
             <CreateChatroom newChatroom={newChatroom} updateNewChatroom={updateNewChatroom} />
 
-            <ChatroomList updatePickChatroom={updatePickChatroom} chatroomList={chatroomList} updateChatroomList={updateChatroomList} />
+            <ChatroomList chatroomList={chatroomList} updateChatroomList={updateChatroomList} />
             <Userlist userList={userList} updateUserList={updateUserList} />
 
           </div> {/* //End Chatroom_sidebar */}

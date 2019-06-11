@@ -7,172 +7,190 @@ let socket = require("socket.io");
 var rimraf = require("rimraf");
 const server = app.listen(port, () => console.log(`Listening on ${port}`));
 
-let chatroomId = 0;
-let messageId = 0;
-let messageArray =[]; //Måste nog sättas till chatrummets meddelanden vid varje GetChat, annars kommer den att tömmas.s
-
-function getChatroomId() {
-    return chatroomId++;
-}
-
-function getMessageId() {
-    return messageId++;
-}
-
-
 /*
-Dubbelkolla så att du inte 'dubbelavslutar', t.ex. res.end() efter res.send(). 
-res.send() kör res.end() implicit.
-Gå även igenom alla statuskoder!!
+
+let roomObj = {
+    name: "",
+    messages: [
+        {user: "", msg: ""}
+    ]
+}
+
 */
+let data = require("./data.json");
+let data1 = data.rooms;
 
-//==============CREATE CHATROOM===============
-app.post("/createchat", (req, res) => {
-    const body = req.body;
-    
-    if (!body.title || typeof body.title !== 'string') {
-      res.status(400).end();
-      return;
+fs.readFile("./data.json", (err, data) => {
+    if (err) {
+        console.log(err)
     }
-
-    //Check if directory/chatroom already exists
-    fs.access("../Database/"+body.title, (err) => {
-        if (err) {
-            //Creates chatroom
-            fs.mkdir('../Database/'+body.title, (err) => {
-        
-                if (err) {
-                      console.error(err);
-                }
-                else {
-                    //Create ChatroomObj
-
-                    let chatroomObj = {
-                        chatID: getChatroomId(),
-                        chatroomName: body.title,
-                    }
-
-                        fs.writeFile('../Database/' + body.title + "/" + body.title + '.json', JSON.stringify(chatroomObj), (err) => {
-                            if (err) {
-                                console.error(err);
-                            }
-                            else {
-                                res.end(chatroomObj);
-                            }
-                        });
-
-                      res.status(201);
-                      res.send("Chatroom created");
-                }
-            })
-        }
-        else (
-            res.status(400).send("Chatroom already exists")
-        )
-    });
+    
+    data = JSON.parse(data);
 });
 
-app.post("/sendmessage", (req, res) => {
-    const body = req.body;
+console.log(data1)
 
-     if (!body.username || typeof body.username !=="string" || !body.message || typeof body.message !=="string") {
-        console.log("Wrong validation");
+//==============GET ROOMS========================OK
+app.get("/chatrooms/", (req, res) => {
+    if(!res) {
+        res.status(204);
+    }
+    res.status(200);
+    res.json(data1);
+});
+
+//============================GET SPECIFIC CHATROOM==============================OK
+app.get("/chatrooms/:name", (req, res) => {
+    let name = req.params.name;
+
+    if (!name) {
         res.status(400).end();
         return;
     } 
 
-    //The MessageObject
-    let newMessageObj = {
-        messageId: getMessageId(),
-        username: body.username,
-        message: body.message,
+    let chatroom = data1.find(data => data.name === name);
+
+    if (chatroom) {
+        res.json(chatroom);
+    }else{
+       res.status(404).end() 
     }
-
-    messageArray.push(newMessageObj);
-
-            fs.writeFile("../Database/Chatroom1/" + "Chatroom1" + "Messages.json", JSON.stringify(messageArray), (err) => {
-                if (err) {
-                    console.log("Writefile wrong");
-                    console.error(err);
-                }
-                else {
-                    res.status(201);
-                    res.send("Message created");
-                }
-            });
-})
-
-//GET Chatroom
-
-app.get("/chatroom/:id", (req, res) => {
-    const body = req.body;
-    let id = req.params.id;
-    let chatroom = [];
-
-
-    fs.readFile('../Database/'+ id + '/' + id + 'Messages.json', (err, data) => {
-        if (err) {
-            console.log(body.chatroom)
-              console.error(err);
-              res.statusCode = 500;
-              res.end();
-        }
-        else {
-            let j = JSON.parse(data);
-
-            for (let i=0; i<j.length; i++ ){
-                chatroom.push(j[i]);
-            }
-            res.statusCode = 201;
-            res.send(chatroom);
-        }
-    });
-
-})
-
-//Get Usernames
-
-app.get('/usernamelist', (req, res) => {
-
-    let userList = [];
-    
-    fs.readFile('../Database/Chatroom1/Chatroom1' + 'Messages.json', (err, data) => {
-        if (err) {
-              console.error(err);
-              res.statusCode = 500;
-              res.end();
-        }
-        else {
-            let j = JSON.parse(data);
-
-                for (let i=0; i<j.length; i++){
-                    if (j[i].username) {
-                        userList.push(j[i].username)
-                    }
-                }
-            res.statusCode = 201;
-            res.send(userList);
-        }
-    });
 });
 
-//Get chatroomList
+//========================CREATE ROOM=========================OK
+app.post("/newroom/", (req, res) => {
+    const body = req.body;
 
-app.get("/chatroomlist", (req, res) => {
-    console.log("CHAT ROOM");
-    fs.readdir("../Database", (err, data) => {
-        console.log(err, data);
-        let chatroomList = data;
-        res.send(chatroomList);
+    if (!body.name || typeof body.name !== 'string') {
+        res.status(400).end();
+        return;
+    }
+
+    for (let chatroom of data1){
+        if (chatroom.name === body.name){
+            res.status(400).send("A chatroom with this name already exists");
+            return;
+        }
+    }
+
+    let roomObj = {
+        name: body.name,
+        chatroom: []
+    }
+
+    data1.push(roomObj)
+
+    fs.writeFile("./data.json", JSON.stringify(data), (err) => {
+        if (err) {
+            console.error(err);
+        }
+        else {
+            res.status(201).json(roomObj);
+        }
+    });
+})
+
+
+//===============SEND MESSAGE========================OK
+    app.post("/send/:name", (req, res) => {
+        const body = req.body;
+        let name = req.params.name;
+
+        if (!body.user || typeof body.user !== "string" || !body.msg || typeof body.msg !== "string") {
+            console.log("Wrong validation");
+            res.status(400).end();
+            return;
+        }
+
+           //The MessageObject
+           let newMessageObj = {
+            user: body.user,
+            msg: body.msg,
+        }
+
+
+        for (let i=0; i<data1.length; i++) {
+           
+            if (data1[i].name === name) {
+                
+                data1[i].chatroom.push(newMessageObj);
+                console.log(data1[i].chatroom)
+                
+            } 
+        }
+
+         fs.writeFile("./data.json", JSON.stringify({rooms: data1}), (err) => { //Lägger till meddelandet MEN tar bort rooms. WTF.
+            if (err) {
+                console.log("Writefile wrong");
+                console.error(err);
+            }
+            else {
+                res.status(201);
+                res.send("Message created");
+            }
+        }); 
+
+
+        res.status(201).send(newMessageObj)
+
     })
-})
 
-//Delete Chatroom
+//=======================Get Usernames=====================OK
+    let userList = []
 
-app.delete("/delete:id", (req, res) => {
-    let id = req.params.id;
-    rimraf("../Database/"+id, function () { 
-        res.statusCode = 200;
-        console.log(id); });
-        res.end();
-})
+    for (let i=0; i<data1.length; i++){
+        console.log(data1[i].chatroom)
+        for (let j=0; j<data1[i].chatroom.length; j++){
+            
+            userList.push(data1[i].chatroom[j].user)
+            console.log(userList);
+        }
+        
+    }
+
+    app.get('/usernamelist/', (req, res) => {
+        let uniqueUsers = [];
+
+        fs.readFile('./data.json', (err, data) => {
+            if (err) {
+                console.error(err);
+                res.statusCode = 500;
+                res.end();
+            }
+            else {
+                for (let i=0; i<userList.length; i++){
+                    if (!uniqueUsers.includes(userList[i])) {
+                        uniqueUsers.push(userList[i]);
+                        console.log(uniqueUsers);
+                    }
+                }
+                res.statusCode = 201;
+                res.send(uniqueUsers);
+            }
+        });
+    });
+
+    //===========================Delete Chatroom====================================OK OK
+
+    app.delete("/delete/:name", (req, res) => { //Funkar men tar också bort rooms, dvs allt slutar fungera.
+        let name = req.params.name;
+
+        if(!name) {
+            res.status(400).end();
+            return;
+        }
+
+        let roomInd = data1.findIndex(data1 => data1.name === name) 
+        console.log(roomInd)
+            if (roomInd !== -1){
+                
+                data1.splice(roomInd, 1);
+            }
+             fs.writeFile("./data.json", JSON.stringify({rooms: data1}), (err) => {
+                if (err){
+                    console.log(err)
+                }
+                res.status(200).end();
+            }) 
+            res.end();
+    })

@@ -24,7 +24,7 @@ const ChatroomList = (props) => {
 
   const Pick = (e) => {
     let val = e.target.id;
-    props.updatePickChatroom(val);
+    //rops.updatePickChatroom(val);
   }
 
   let chatlist = props.chatroomList.map(x => 
