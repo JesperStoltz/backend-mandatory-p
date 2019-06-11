@@ -25,7 +25,6 @@ fs.readFile("./data.json", (err, data) => {
     if (err) {
         console.log(err)
     }
-    
     data = JSON.parse(data);
 });
 
@@ -34,7 +33,8 @@ console.log(data1)
 //==============GET ROOMS========================OK
 app.get("/chatrooms/", (req, res) => {
     if(!res) {
-        res.status(204);
+        res.status(204).send("There are no chatrooms at the moment.");
+        return;
     }
     res.status(200);
     res.json(data1);
@@ -45,7 +45,7 @@ app.get("/chatrooms/:name", (req, res) => {
     let name = req.params.name;
 
     if (!name) {
-        res.status(400).end();
+        res.status(400).send("There is no chatroom with this name.");
         return;
     } 
 
@@ -53,6 +53,7 @@ app.get("/chatrooms/:name", (req, res) => {
 
     if (chatroom) {
         res.json(chatroom);
+        res.status(200)
     }else{
        res.status(404).end() 
     }
@@ -64,13 +65,13 @@ app.post("/newroom/", (req, res) => {
     const body = req.body;
 
     if (!body.name || typeof body.name !== 'string') {
-        res.status(400).end();
+        res.status(400).send("This request contains invalid information");
         return;
     }
 
     for (let chatroom of data1){
         if (chatroom.name === body.name){
-            res.status(400).send("A chatroom with this name already exists");
+            res.status(400).send("A chatroom with this name already exists"); 
             return;
         }
     }
@@ -85,9 +86,11 @@ app.post("/newroom/", (req, res) => {
     fs.writeFile("./data.json", JSON.stringify(data), (err) => {
         if (err) {
             console.error(err);
+            res.status(500).send("Something went wrong on the server.")
         }
         else {
             res.status(201).json(roomObj);
+            res.send("Chatroom created!")
         }
     });
     return;
@@ -100,8 +103,7 @@ app.post("/newroom/", (req, res) => {
         let name = req.params.name;
 
         if (!body.user || typeof body.user !== "string" || !body.msg || typeof body.msg !== "string") {
-            console.log("Wrong validation");
-            res.status(400).end();
+            res.status(400).send("This request contains invalid information");
             return;
         }
 
@@ -124,18 +126,17 @@ app.post("/newroom/", (req, res) => {
 
          fs.writeFile("./data.json", JSON.stringify({rooms: data1}), (err) => { //Lägger till meddelandet MEN tar bort rooms. WTF.
             if (err) {
-                console.log("Writefile wrong");
                 console.error(err);
+                res.status(500).send("Something went wrong on the server.")
             }
             else {
-                res.status(201);
+                res.status(201).send("Message created and sent");
                 io.emit("message", newMessageObj);
 
-                res.send("Message created");
                 return;
             }
         }); 
-    })
+    });
 
 //=======================Get Usernames=====================OK
 
@@ -143,7 +144,6 @@ app.post("/newroom/", (req, res) => {
     app.get('/usernamelist/:name', (req, res) => {
         let name = req.params.name;
         let arr=[];
-        let uniqueArr=[];
 
         for (let i=0; i<data1.length; i++){
 
@@ -156,8 +156,7 @@ app.post("/newroom/", (req, res) => {
             }
         }
 
-        res.send(arr)
-        res.statusCode = 200;
+        res.status(200).json(arr);
         return;
     });
 
@@ -174,14 +173,14 @@ app.post("/newroom/", (req, res) => {
         let roomInd = data1.findIndex(data1 => data1.name === name) 
         console.log(roomInd)
             if (roomInd !== -1){
-                
                 data1.splice(roomInd, 1);
             }
              fs.writeFile("./data.json", JSON.stringify({rooms: data1}), (err) => {
                 if (err){
                     console.log(err)
+                    res.status(500).send("Something went wrong on the server.")
                 }
-                res.status(200).end();
+                res.status(200).send("Object deleted");
             }) 
-            res.end();
+            return;
     })

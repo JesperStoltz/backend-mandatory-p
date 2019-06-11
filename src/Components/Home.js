@@ -22,7 +22,7 @@ Typ.
 
 const Home = (props) => {
   const [newChatroom, updateNewChatroom] = useState("test");
-  const [currentChatroom, updateCurrentChatroom] = useState("Jesper1");
+  const [currentChatroom, updateCurrentChatroom] = useState("Click on a chatroom to start chatting");
   const [chatWindow, updateChatwindow] = useState([]);
   const [chatroomList, updateChatroomList] = useState([]);
   const [userList, updateUserList] = useState([]);
