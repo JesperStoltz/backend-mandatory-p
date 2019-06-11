@@ -1,8 +1,6 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import './Userlist.css';
 import axios from 'axios';
-
-//Build a GET to get all the usernames in the chatroom
 
 const Userlist = (props) => {
 
@@ -11,9 +9,8 @@ const Userlist = (props) => {
         axios.get("/usernamelist/"+props.currentChatroom)
         .then(res => {
             props.updateUserList(res.data)
-            console.log(res.data)
         })
-      }, []);
+      }, [props.currentChatroom, props.poll]);
     
       let userlist = props.userList.map(x => 
               <li className="list-item">{x}</li>

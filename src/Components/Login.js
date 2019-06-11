@@ -1,9 +1,6 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { BrowserRouter, Route, Redirect } from "react-router-dom"
+import React, {useState}  from 'react';
 import Home from "./Home.js";
 import "./Login.css";
-
-
 
 const Login = () => {
     const [tempUsername, updateTempUsername] = useState("");

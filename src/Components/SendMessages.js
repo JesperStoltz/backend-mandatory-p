@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { } from 'react';
 import './SendMessages.css';
 import axios from "axios";
-
-//Build a POST that sends the username and the message into the object.
+import io from 'socket.io-client';
+const socket = io('http://localhost:3001');
 
 const SendMessages = (props) => {
 
@@ -16,6 +16,8 @@ const SendMessages = (props) => {
         axios.post("/send/"+props.currentChatroom, {user: props.username, msg: props.newMessage})
         .then (res => {
             console.log(res);
+            props.updatePoll("A");
+            props.updatePoll("B");
         })
         .catch(err => {
             console.log(err);

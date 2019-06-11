@@ -27,6 +27,16 @@
     flex-direction: row;
   }
 
+  .list_content:hover {
+    color: blue;
+    cursor: pointer;
+  }
+
   .list_delete_content {
-    margin-left: 10px;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+
+  .list_delete_content:hover {
+    color: red;
   }

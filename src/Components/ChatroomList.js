@@ -1,9 +1,6 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import './ChatroomList.css';
 import axios from 'axios';
-
-
-//Build a GET-method for the chatroom-name keys!
 
 const ChatroomList = (props) => {
   useEffect(() => {
@@ -15,14 +12,23 @@ const ChatroomList = (props) => {
       }
         props.updateChatroomList(arr)
     })
-  }, []);
+  }, [props.poll]);
 
   const Delete = (e) => {
     let id = e.target.id;
 
     axios.delete("/delete/"+id)
     .then (res => {
-      console.log(res);
+      props.updatePoll("A");
+      props.updatePoll("B");
+      if (id === props.currentChatroom){
+
+        axios.get("/chatrooms/")
+        .then(res => {
+          console.log("get")
+          props.updateCurrentChatroom(res.data[0].name);
+        })
+      }
     })
   }
 

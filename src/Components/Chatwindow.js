@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useEffect} from 'react';
 import "./Chatwindow.css";
 import axios from 'axios';
-
-//Build a GET to get both the usernames and the messages from the specific chatrooms key.
-
 
 const Chatwindow = (props) => {
 
@@ -17,7 +14,7 @@ const Chatwindow = (props) => {
                 props.updateChatwindow(arr);  
             
             })
-    }, [props.currentChatroom]);
+    }, [props.currentChatroom, props.poll]);
 
  
      let chatwindow = props.chatWindow.map(x =>

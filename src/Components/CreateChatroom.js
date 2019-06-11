@@ -1,15 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { } from 'react';
 import './CreateChatroom.css';
 import axios from "axios";
-import io from "socket.io-client";
-const fs = require("fs");
-
-
-
-//Build a POST to send a new chatroom-object to the server.
 
 const CreateChatroom = (props) => {
-    
     
     const onChange = (e) => {
         props.updateNewChatroom(e.target.value);
@@ -20,6 +13,8 @@ const CreateChatroom = (props) => {
         axios.post("/newroom/", {name: props.newChatroom})
         .then (res => {
             console.log(res);
+            props.updatePoll("A");
+            props.updatePoll("B");
         })
         .catch(err => {
             console.log(err);
