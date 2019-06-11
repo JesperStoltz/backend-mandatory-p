@@ -140,12 +140,15 @@ app.post("/newroom/", (req, res) => {
     app.get('/usernamelist/:name', (req, res) => {
         let name = req.params.name;
         let arr=[];
+        let uniqueArr=[];
 
         for (let i=0; i<data1.length; i++){
 
             if (data1[i].name === name) {
             for (let key of data1[i].chatroom) {
+                if (!arr.includes(key.user)){
                 arr.push(key.user)
+                }
             }
             }
         }
