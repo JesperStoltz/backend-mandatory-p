@@ -3,9 +3,10 @@ const app = express();
 app.use(express.json());
 const port = 3001;
 const fs = require("fs");
-let socket = require("socket.io");
-var rimraf = require("rimraf");
-const server = app.listen(port, () => console.log(`Listening on ${port}`));
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
+const server = http.listen(port, () => console.log(`Listening on ${port}`));
 
 /*
 
@@ -128,6 +129,8 @@ app.post("/newroom/", (req, res) => {
             }
             else {
                 res.status(201);
+                io.emit("message", newMessageObj);
+
                 res.send("Message created");
                 return;
             }

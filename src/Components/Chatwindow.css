@@ -3,6 +3,7 @@
     width: 500px;
     box-sizing: border-box;
     background-image: linear-gradient(to bottom right, rgb(116, 112, 112) , purple, rgb(122, 120, 120));
+    overflow-y: scroll;
   }
 
   .Chatwindow_title {
